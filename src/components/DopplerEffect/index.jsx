@@ -4,10 +4,10 @@ import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core';
-import { createMuiTheme } from '@material-ui/core/styles';
 import { ThemeProvider } from '@material-ui/styles';
 import starplanet from '../../assets/starplanet-glow.png';
 import spacebg from '../../assets/spacebg.jpg';
+import { muiTheme } from '../../themes/muiTheme';
 
 const useStyles = makeStyles({
     controlbar: {      
@@ -27,40 +27,6 @@ const useStyles = makeStyles({
       width: 100,
       color: 'white'      
     }
-  });
-
-  const muiTheme = createMuiTheme({
-    overrides:{
-      MuiSlider: {
-        thumb:{
-          color: 'darkorange'
-        },
-        track: {
-          color: 'gold'
-        },
-        rail: {
-          color: 'gold'
-        },
-        mark:{
-          color: 'gold'
-        },
-        markLabel: {
-          color: 'gold'
-        },
-        markLabelActive: {
-          color: 'red'
-        }
-      },
-      MuiInputBase: {
-        input: {
-          background: '#cfcfcf',
-          color: 'black',
-          textAlign: 'right',
-          padding: 8
-        }
-      }
-
-  }
   });
 
 const valueLabelFormat = (value) => {
