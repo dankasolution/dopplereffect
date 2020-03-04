@@ -5,9 +5,10 @@ import Grid from '@material-ui/core/Grid';
 import Input from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
+import { muiTheme } from '../../themes/muiTheme';
+import { toExponentialFormat } from '../../lib/utils';
 import starplanet from '../../assets/starplanet-glow.png';
 import spacebg from '../../assets/spacebg.jpg';
-import { muiTheme } from '../../themes/muiTheme';
 
 const useStyles = makeStyles({
     controlbar: {      
@@ -29,23 +30,21 @@ const useStyles = makeStyles({
     }
   });
 
-const valueLabelFormat = (value) => {
-    const [coefficient, exponent] = value
-        .toExponential()
-        .split('e')
-        .map(item => Number(item));
-    
-    return `${Math.round(coefficient)}e^${exponent}`;
-}
   
 export const DopplerEffect = () => {
   const [velocity, setVelocity] = useState(0);
-
-  const hue = velocity>0? 300 : 170 ;
-  const saturate = Math.abs(velocity)/100 *500;
-  const starsize = (100-velocity)/100 * 10 + 10;
-
   const styles = useStyles();
+
+  const redhue = 300;
+  const bluehue = 170;
+  const maxsaturation = 500;
+  const minstarvh = 10;
+  
+  //here is where we set the star's hue, saturation and size depending on the velocity  
+  const hue = velocity>0? redhue : bluehue;
+  const saturate = Math.abs(velocity)/100 * maxsaturation;
+  const starsize = (100-velocity)/100 * 10 + minstarvh;
+
   const useFilter = makeStyles({
       star:{
         height: `${starsize}vh`,
@@ -144,8 +143,8 @@ export const DopplerEffect = () => {
                   marks={slidermarks}
                   color= "secondary"
                   onChange={handleSliderChange}
-                  getAriaValueText={valueLabelFormat}
-                  valueLabelFormat={valueLabelFormat}
+                  getAriaValueText={toExponentialFormat}
+                  valueLabelFormat={toExponentialFormat}
                   valueLabelDisplay="auto"
                   aria-labelledby="velocity-slider"
               />
