@@ -6,7 +6,7 @@ import Input from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { muiTheme } from '../../themes/muiTheme';
-import starplanet from '../../assets/starplanet-red.png';
+import starplanet from '../../assets/starplanet-red2.png';
 import spacebg from '../../assets/spacebg.jpg';
 
 const useStyles = makeStyles({
@@ -34,9 +34,8 @@ export const DopplerEffect = () => {
   const [velocity, setVelocity] = useState(initialvelocity);
   const styles = useStyles();
 
-  const REDHUE = 0;
   const BLUEHUE = 255;
-  const MINSTARVH = 10;
+  const MINSTARVH = 20;
   const MINVELOCITY = -100;
   const MAXVELOCITY = 100;
   const MINBRIGHTNESS = 50;
