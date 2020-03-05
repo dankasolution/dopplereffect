@@ -6,8 +6,7 @@ import Input from '@material-ui/core/Input';
 import { makeStyles } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
 import { muiTheme } from '../../themes/muiTheme';
-import { toExponentialFormat } from '../../lib/utils';
-import starplanet from '../../assets/starplanet-glow.png';
+import starplanet from '../../assets/starplanet-red.png';
 import spacebg from '../../assets/spacebg.jpg';
 
 const useStyles = makeStyles({
@@ -29,26 +28,34 @@ const useStyles = makeStyles({
       color: 'white'      
     }
   });
-
   
 export const DopplerEffect = () => {
-  const [velocity, setVelocity] = useState(0);
+  const initialvelocity = 30;
+  const [velocity, setVelocity] = useState(initialvelocity);
   const styles = useStyles();
 
-  const redhue = 300;
-  const bluehue = 170;
-  const maxsaturation = 500;
-  const minstarvh = 10;
-  
-  //here is where we set the star's hue, saturation and size depending on the velocity  
-  const hue = velocity>0? redhue : bluehue;
-  const saturate = Math.abs(velocity)/100 * maxsaturation;
-  const starsize = (100-velocity)/100 * 10 + minstarvh;
+  const REDHUE = 0;
+  const BLUEHUE = 255;
+  const MINSTARVH = 10;
+  const MINVELOCITY = -100;
+  const MAXVELOCITY = 100;
+  const MINBRIGHTNESS = 50;
+
+  const starsize = (MAXVELOCITY-velocity)/100 * 10 + MINSTARVH;
+
+  const maxincfactor = Math.log(MAXVELOCITY-MINVELOCITY);
+  let incfactor = Math.log(MAXVELOCITY-velocity);
+  if(incfactor < 0) incfactor = 0;
+
+  let huevalue = (MAXVELOCITY-velocity)/(MAXVELOCITY-MINVELOCITY)*BLUEHUE;
+  huevalue = incfactor/maxincfactor * huevalue;
+
+  let brightvalue = (incfactor/maxincfactor)*100 + MINBRIGHTNESS;
 
   const useFilter = makeStyles({
       star:{
         height: `${starsize}vh`,
-        filter: `invert(0%) sepia(100%) saturate(${saturate}%) hue-rotate(${hue}deg) brightness(100%) contrast(110%)`
+        filter: `hue-rotate(${huevalue}deg) brightness(${brightvalue}%)`
       }
     }
   );
@@ -88,7 +95,7 @@ export const DopplerEffect = () => {
   ];
 
   return (
-    <Grid container xs={12}
+    <Grid container
           className="App-interaction">
       <Grid container
             alignItems="center"
@@ -108,7 +115,7 @@ export const DopplerEffect = () => {
             className={styles.controlbar}>
           <Grid item>
             <Typography id="velocity-slider">
-              Velocity (km/s):
+              Velocity (km/s): 
             </Typography>
           </Grid>
           <Grid item>
@@ -122,9 +129,9 @@ export const DopplerEffect = () => {
                   onChange={handleInputChange}
                   onBlur={handleBlur}
                   inputProps={{
-                      step: 10,
-                      min: -100,
-                      max: 100,
+                      step: 1,
+                      min: {MINVELOCITY},
+                      max: {MAXVELOCITY},
                       type: 'number',
                       'aria-labelledby': 'velocity-slider',
                   }}
@@ -136,15 +143,12 @@ export const DopplerEffect = () => {
               <Slider
                   className={styles.slider}
                   value={typeof velocity === 'number' ? velocity : 0}
-                  min={-100}
-                  max={100}
-                  // scale={x => x**10}
+                  min={MINVELOCITY}
+                  max={MAXVELOCITY}
                   track={false}
                   marks={slidermarks}
                   color= "secondary"
                   onChange={handleSliderChange}
-                  getAriaValueText={toExponentialFormat}
-                  valueLabelFormat={toExponentialFormat}
                   valueLabelDisplay="auto"
                   aria-labelledby="velocity-slider"
               />
