@@ -10,7 +10,7 @@ function App() {
           disableGutters={true}
           maxWidth={false}>
       <Container className="App-header" maxWidth={false}>
-        <span>Doppler Effect</span>        
+        <span>The Doppler Effect</span>        
       </Container>
       <Container className="App-body" maxWidth={false}>
         <DopplerEffect /> 
